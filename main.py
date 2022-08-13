@@ -7,9 +7,7 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 
 now=time.time()
-conn = sqlite3.connect("mydatabase.db")
-cursor = conn.cursor()
-cursor.execute("""CREATE TABLE IF NOT EXISTS datums_(id INTEGER PRIMARY KEY AUTOINCREMENT, title text, datum real)""")
+
 
 class MyApp(App):
     def build(self):
@@ -25,33 +23,18 @@ class MyApp(App):
     
     
     def buttonClicked(self,btn):
+        conn = sqlite3.connect("mydatabase.db")
+        cursor = conn.cursor()
+        cursor.execute("""CREATE TABLE IF NOT EXISTS datums(id INTEGER PRIMARY KEY AUTOINCREMENT, title text, datum real)""")
         sql = "INSERT INTO datums(title, datum) VALUES (?, ?)"
         cursor.execute(sql, ['тест1', self.txt1.text])
-        conn.commit()
         print(cursor.fetchall())
-        
-        # sql1 = "UPDATE datums SET title = ? WHERE id = ?;"
-        # cursor.execute(sql1, ['тест111', 6])
-        # conn.commit()
-        
-        
-        #CREATE - создать таблицу
-        #SELECT - получить записи
-        #UPDATE - обновить записи
-        #INSERT - вставить новую записи
-        
-        #FROM - указать имя таблицы
-        #WHERE - условие
-        #ORDER BY - сортировка (ASK(0, 1, 2, ...)/DESC(100, 99, 98, ...))
-        #GROUP BY - групировка по условию
-        
-        print("Here's a listing of all the records in the table:")
-        for row in cursor.execute("SELECT * FROM datums ORDER BY title"):
-            print(row)
+        conn.commit()
         conn.close()
         
-        def add_more(self):
-            self.clear_widgets(self.txt1)
+    class TestApp(App):
+      def build(self):
+        return MyApp()
         
 
 if __name__ == '__main__':
