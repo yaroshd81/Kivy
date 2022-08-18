@@ -1,0 +1,61 @@
+WindowManager:
+  FirstWindow:
+  SecondWindow:
+
+<FirstWindow>:
+  name: "first"
+
+  FloatLayout:
+    orientation: "vertical"
+
+    padding: 20
+    spacing: 20
+
+    Label:
+      id: label
+      text:"Введіть дату"
+      size_hint: 1, .1
+      pos_hint: {'center_x': .5, 'center_y': .7}
+
+    Label:
+      text:"Приклад: 13/08/2022" 
+      size_hint: 1, .1
+      pos_hint: {'center_x': .5, 'center_y': .6}
+
+    TextInput:
+      id: text_input
+      multiline: False
+      size_hint: .8, .05
+      pos_hint: {'center_x': .5, 'center_y': .5}
+
+
+    
+    Button:
+      text:"Відлік"
+      size_hint: .5, .1
+      pos_hint: {'center_x': .5, 'center_y': .3}
+
+      on_release:
+        root.change_text()
+        app.root.current = "second"
+
+<SecondWindow>:
+  name: "second"
+
+  FloatLayout:
+    orientation: "vertical"
+
+     padding: 20
+     spacing: 20
+
+     Label:
+        id: label
+        text:"Відлік"
+        size_hint: 1, .1
+        pos_hint: {'center_x': .5, 'center_y': .6}
+
+     Label:
+        id: label
+        text:"Відлік..."
+        size_hint: 1, .1
+        pos_hint: {'center_x': .5, 'center_y': .4}
