@@ -19,20 +19,29 @@ conn = sqlite3.connect("mydatabase.db")
 cursor = conn.cursor()
 cursor.execute("CREATE TABLE IF NOT EXISTS datums(id INTEGER PRIMARY KEY AUTOINCREMENT, title text, datum real)")
 selectData = 0
+conn2 = sqlite3.connect("mydatabase2.db")
+cursor2 = conn2.cursor()
+cursor2.execute("CREATE TABLE IF NOT EXISTS screen(id INTEGER PRIMARY KEY AUTOINCREMENT, title text, screens real)")
+fscreen = 'first'
 
-# dt means delta-time
+def screens_first():
+        sql2 = "INSERT INTO screen(title, screens) VALUES (?, ?)"
+        cursor2.execute(sql2, ['тест1','second'])
+        conn2.commit()
+        print('screen')
+    
 def timerUpdateDate(dt):
     now = time.time()
     if selectData > 0:
         if selectData > now:
-            times = selectData - now
+            times = int(round(selectData - now))
             times_year = times//31104000
             times_month = (times%31104000)//2592000
             times_day = ((times%31104000)%2592000)//86400
             times_hour = (((times%31104000)%2592000)%86400)//3600
             times_minute = ((((times%31104000)%2592000)%86400)%3600)//60
             times_second = ((((times%31104000)%2592000)%86400)%3600)%60
-            times1 = str(times_day) + " дні/день, " + str(times_hour) + " годин(и), " + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
+            times1 = str(times_day) + " дні/день/днів, " + str(times_hour) + " годин(и), \n" + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
             print(times1)
             print("selectData")
             print(selectData)
@@ -44,10 +53,6 @@ def timerUpdateDate(dt):
     else:
         print(selectData - now)
 
-# call timerUpdateDate every 1.0 seconds
-# Clock.schedule_interval(timerUpdateDate, 1.0)
-
-
 class SecondWindow(Screen):
     def start(self):
         Clock.schedule_interval(timerUpdateDate, 1)
@@ -56,52 +61,6 @@ class SecondWindow(Screen):
         datas_ = datetime.strptime(datas,"%d/%m/%Y")
         sec = datetime.timestamp(datas_)            
         times = int(round(sec - now))
-        
-
-            # while times > 0:
-            #     times_year = times//31104000
-            #     times_month = (times%31104000)//2592000
-            #     times_day = ((times%31104000)%2592000)//86400
-            #     times_hour = (((times%31104000)%2592000)%86400)//3600
-            #     times_minute = ((((times%31104000)%2592000)%86400)%3600)//60
-            #     times_second = ((((times%31104000)%2592000)%86400)%3600)%60
-            #     if times > 0:
-            #         if times> 60:
-            #             if times > 3600:
-            #                 if times > 86400:
-            #                     if times > 2592000:
-            #                         if times > 31104000:
-            #                             times1 = str(times_year) + " рік/роки, " + str(times_month) + " місяць(і), " + str(times_day) + " дні/день, " + str(times_hour) + " годин(и), " + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                             self.label1_text.text = "Залишилось:"                                        
-            #                             sm.get_screen('second').ids.label2.text = times1
-            #                         else:
-            #                             times1 = str(times_month) + " місяць(і), " + str(times_day) + " дні/день, " + str(times_hour) + " годин(и), " + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                             self.label1_text.text = "Залишилось:"
-            #                             sm.get_screen('second').ids.label2.text = times1
-            #                     else:                                        
-            #                         times_year = times//31104000
-            #                         times_month = (times%31104000)//2592000
-            #                         times_day = ((times%31104000)%2592000)//86400
-            #                         times_hour = (((times%31104000)%2592000)%86400)//3600
-            #                         times_minute = ((((times%31104000)%2592000)%86400)%3600)//60
-            #                         times_second = ((((times%31104000)%2592000)%86400)%3600)%60
-            #                         times1 = str(times_day) + " дні/день, " + str(times_hour) + " годин(и), " + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                         print('1')
-            #                         # self.label1_text.text = "Залишилось:"
-            #                         sm.get_screen('second').ids.label2.text = times1
-            #                 else:
-            #                     times1 = str(times_hour) + " годин(и), " + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                     self.label1_text.text = "Залишилось:"
-            #                     sm.get_screen('second').ids.label2.text = times1
-            #             else:
-            #                 times1 = str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                 self.label1_text.text = "Залишилось:"
-            #                 sm.get_screen('second').ids.label2.text = times1
-            #         else:
-            #             times1 = str(times_second) + "секунд(и)"
-            #             self.label1_text.text = "Залишилось:"
-            #             sm.get_screen('second').ids.label2.text = times1
-    # pass
 
 secondWindow = SecondWindow()
 
@@ -114,68 +73,10 @@ class FirstWindow(Screen):
         global selectData
         selectData = datetime.timestamp(datetime.strptime(self.data.text,"%d/%m/%Y"))
         secondWindow.start()
-        # for dat in cursor.execute("SELECT * FROM datums WHERE ID = (SELECT MAX(ID) FROM datums)"):
-        #     datas = dat[2]
-        #     datas_ = datetime.strptime(datas,"%d/%m/%Y")
-        #     sec = datetime.timestamp(datas_)
-        #     times = int(round(sec - now))
-        #     times1 = str(times)
-            # while times > 0:
-            #     times_year = times//31104000
-            #     times_month = (times%31104000)//2592000
-            #     times_day = ((times%31104000)%2592000)//86400
-            #     times_hour = (((times%31104000)%2592000)%86400)//3600
-            #     times_minute = ((((times%31104000)%2592000)%86400)%3600)//60
-            #     times_second = ((((times%31104000)%2592000)%86400)%3600)%60
-            #     if times > 0:
-            #         if times> 60:
-            #             if times > 3600:
-            #                 if times > 86400:
-            #                     if times > 2592000:
-            #                         if times > 31104000:
-            #                             times1 = str(times_year) + " рік/роки, " + str(times_month) + " місяць(і), " + str(times_day) + " дні/день, " + str(times_hour) + " годин(и), " + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                             # self.label1_text.text = "Залишилось:"
-            #                             # self.label2_text.text = times1
-            #                         else:
-            #                             times1 = str(times_month) + " місяць(і), " + str(times_day) + " дні/день, " + str(times_hour) + " годин(и), " + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                             # self.label1_text.text = "Залишилось:"
-            #                             # self.label2_text.text = times1 
-            #                     else:
-            #                         times_year = times//31104000
-            #                         times_month = (times%31104000)//2592000
-            #                         times_day = ((times%31104000)%2592000)//86400
-            #                         times_hour = (((times%31104000)%2592000)%86400)//3600
-            #                         times_minute = ((((times%31104000)%2592000)%86400)%3600)//60
-            #                         times_second = ((((times%31104000)%2592000)%86400)%3600)%60
-            #                         times1 = str(times_day) + " дні/день, " + str(times_hour) + " годин(и), " + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                         print(times1)
-            #                         test = "Залишилось:"
-            #                         # self.label1_text.text = "Залишилось:"
-            #                         # self.label2_text.text = times1
-            #                 else:
-            #                     times1 = str(times_hour) + " годин(и), " + str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                     # self.label1_text.text = "Залишилось:"
-            #                     # self.label2_text.text = times1
-            #             else:
-            #                 times1 = str(times_minute) + " хвилин(и), " + str(times_second) + " секунд(и)" 
-            #                 # self.label1_text.text = "Залишилось:"
-            #                 # self.label2_text.text = times1
-            #         else:
-            #             times1 = str(times_second) + "секунд(и)"
-            #             # self.label1_text.text = "Залишилось:"
-            #             # self.label2_text.text = times1
-            # sm.get_screen('second').ids.label2.text = times1
+        screens_first()
 
 class WindowManager(ScreenManager):
     pass
-
-# class Container1(FloatLayout):
-#     def change_text(self):
-#         print("11111111111")
-#         sql = "INSERT INTO datums(title, datum) VALUES (?, ?)"
-#         cursor.execute(sql, ['тест1', self.data.text])
-#         conn.commit()
-#         cursor.fetchall()
 
 sm = ScreenManager()
 sm.add_widget(FirstWindow(name='first'))

@@ -1,5 +1,5 @@
-<FirstWindow>:
-  name: "first"
+<SecondWindow>:
+  name: "second"
   data: text_input
   FloatLayout:
     orientation: "vertical"
@@ -33,12 +33,12 @@
 
       on_release:
         root.change_text()
-        root.manager.current = "second"
-        app.root.current = "second"
+        root.manager.current = "first"
+        app.root.current = "first"
 
-<SecondWindow>:
+<FirstWindow>:
   id: idSecondWindow
-  name: "second"
+  name: "first"
   label1_text: label1
   label2_text: label2
 
@@ -58,13 +58,12 @@
       id: label2
       text:"Відлік..."
       size_hint: 1, .1
-      pos_hint: {'center_x': .5, 'center_y': .5}
-
+      pos_hint: {'center_x': .5, 'center_y': .4}
     Button:
-      text:"Назад"
+      text:"Відлік"
       size_hint: .5, .1
       pos_hint: {'center_x': .5, 'center_y': .3}
 
       on_release:
-        root.manager.current = "first"
-        app.root.current = "first"
+        root.manager.current = "second"
+        app.root.current = "second"
